@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<head>
+<title>Welcome to Mr.Dai's website.</title>
+<!-- <base href="http://www.daibotech.com" /> -->
+<!-- <base target="_blank" /> -->
+<!-- <link href="image\logo.ico" rel="shortcut icon" /> -->
+<!-- <link rel="stylesheet" type="text/css" href="index.css"> -->
+<meta charset="utf-8">
+<meta name="keywords" content="daibor">
+<meta name="description" content="学习工作自用background">
+<!-- <script type="text/javascript" src="/index.js"></script> -->
+</head>
+<body>
+	<canvas id="clock" width="500px" height="500px">
+		您该升级浏览器了，当前浏览器不支持 Canvas 绘图
+	</canvas>
+	<script type="text/javascript">
+		var width=500,height=500,radius=220;
+		var dot={
+			x:width/2,
+			y:height/2,
+			radius:6,
+			fillColor:'#ccc'
+		};
+		var clock=document.getElementById('clock');
+		var hand=document.createElement('canvas');
+		var bgCtx=clock.getContext('2d');
+		bgCtx.beginPath();
+		bgCtx.arc(dot.x,dot.y,radius,0,Math.PI*2);
+		bgCtx.stroke();
+		bgCtx.beginPath();
+		bgCtx.arc(dot.x,dot.y,dot.radius,0,Math.PI*2);
+		bgCtx.fill();
+		clock.appendChild(hand);
+		var handCtx=hand.getContext('2d');
+		function updatePointers() {
+		    handCtx.clearRect(0, 0, width, height);　　// 清掉原来的指针
+
+		    // 获取当前时间
+		    var now = new Date();
+		    var h = now.getHours();
+		    var m = now.getMinutes();
+		    var s = now.getSeconds();
+
+		    // 算出时分秒指针现在应指向圆的几分之几处
+		    h = h > 12 ? h - 12 : h;
+		    h = h + m / 60;
+		    h = h / 12;
+		    m = m / 60;
+		    s = s / 60;
+
+		    drawPointers(s, 2, 100); // 画秒针
+		    drawPointers(m, 4, 90); // 画分针
+		    drawPointers(h, 6, 80); // 画时针
+		}
+		function drawPointers(angle, lineWidth, length) {
+		    angle = angle * Math.PI * 2 - Math.PI / 2;
+
+		    handCtx.beginPath();
+		    handCtx.lineWidth = lineWidth;
+		    handCtx.strokeStyle = "#000";
+		    handCtx.moveTo(dot.x, dot.y);
+		    handCtx.lineTo(dot.x + length * Math.cos(angle), dot.y + length * Math.sin(angle));
+		    handCtx.stroke();
+		    handCtx.closePath();
+		}
+		setInterval(updatePointers, 1000);
+		updatePointers();
+	</script>
+	<!-- <script src="//cdn.bootcss.com/canvas-nest.js/1.0.1/canvas-nest.min.js"></script> -->
+<!-- 	<input type="text" name="bg-line-width">
+	<input type="text" name="bg-line-color">
+	<input type="text" name="bg-background-color">
+	<input type="text" name="hand-line-width">
+	<input type="text" name="hand-line-color"> -->
+</body>
+</html>
